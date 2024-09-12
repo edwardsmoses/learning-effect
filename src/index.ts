@@ -1,5 +1,16 @@
-import { Console, Effect} from "effect";
+import { Console, Effect } from "effect";
 
-const main = Console.log("Hello World!");
+const fetchRequest = Effect.promise(() =>
+  fetch("https://pokeapi.co/api/v2/pokemon/garchomp/")
+);
 
-Effect.runSync(main);
+const jsonResponse = (response: Response) =>
+  Effect.promise(() => response.json());
+
+const main = Effect.flatMap(
+  fetchRequest,
+  (response) =>
+    Effect.flatMap(jsonResponse(response), (jsonVal) => Console.log(jsonVal))
+);
+
+Effect.runPromise(main);
