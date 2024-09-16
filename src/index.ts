@@ -16,9 +16,6 @@ const savePokemon = (pokemon: unknown) => Effect.tryPromise(() => fetch("https:/
   body: JSON.stringify(pokemon)
 }))
 
-const main = pipe(fetchRequest, 
-  Effect.flatMap(jsonResponse),
-  Effect.flatMap(savePokemon), 
-);
+const main = fetchRequest.pipe(Effect.flatMap(jsonResponse), Effect.flatMap(savePokemon));
 
 Effect.runPromise(main);
